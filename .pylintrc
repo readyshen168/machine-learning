@@ -1,0 +1,28 @@
+[BASIC]
+# 方法名和函数名使用小驼峰
+# function-rgx=^[a-z][a-zA-Z0-9]*$
+# method-rgx=^[a-z][a-zA-Z0-9]*$
+# 方法名和函数名区分测试文件，测试问价可以混合小驼峰和下划线
+# function-rgx=^(?!test_)[a-z][a-zA-Z0-9]*$|^test_[a-zA-Z0-9_]*[a-zA-Z0-9]$
+# method-rgx=^(?!test_)[a-z][a-zA-Z0-9]*$|^test_[a-zA-Z0-9_]*[a-zA-Z0-9]$
+
+# 方法名和函数名可以混合小驼峰和下划线
+function-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
+method-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
+
+# 变量名使用小驼峰
+variable-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
+
+# 类名使用大驼峰
+class-rgx=^[A-Z][a-zA-Z0-9]*$
+
+# 常量名保持大写+下划线
+const-rgx=^[A-Z_][A-Z0-9_]*[A-Z0-9]$
+
+# 参数名
+argument-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
+
+module-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
+
+[MESSAGE CONTROL]
+
