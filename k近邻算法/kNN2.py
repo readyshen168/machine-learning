@@ -1,14 +1,23 @@
-import numpy as np
+"""
+kNN2
+"""
 import operator as op
+import numpy as np
 
 
 def createDataSet():
+    """
+    createDataSet
+    """
     dataSet = np.array([[1.0, 1.1], [1.0, 1.0], [0, 0], [0, 0.1]])
     labels = ['A', 'A', 'B', 'B']
     return dataSet, labels
 
 
 def classify0(inX, dataSet, labels, k):
+    """
+    classify0
+    """
     # 计算inX与dataSet中各个点的距离
     dataSetSize = dataSet.shape[0]
     diffValue = dataSet - np.tile(inX, (dataSetSize, 1))

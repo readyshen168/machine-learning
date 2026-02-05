@@ -1,9 +1,15 @@
-import numpy as np
+"""
+module kNN
+"""
 import operator as op
+import numpy as np
 
 
 # 生成数据集和标签
 def createDataSet():
+    """
+    createDataset
+    """
     dataSet = np.array([[1.0, 1.1], [1.0, 1.0], [0, 0], [0, 0.1]])
     # np.array...测试一下此处的array
     print(type(dataSet))  # <class 'numpy.ndarray'>
@@ -15,6 +21,9 @@ def createDataSet():
 
 
 def classify0(inX, dataSet, labels, k):
+    """
+    classify0
+    """
     # dataSet有多少行
     dataSetSize = dataSet.shape[0]
     # 求差值
