@@ -13,8 +13,8 @@ method-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
 # 变量名使用小驼峰
 variable-rgx=^[a-z][a-zA-Z0-9_]*[a-zA-Z0-9]$
 
-# 类名使用大驼峰
-class-rgx=^[A-Z][a-zA-Z0-9]*$
+# 类名使用大驼峰和下划线
+class-rgx=^[A-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$
 
 # 常量名保持大写+下划线
 const-rgx=^[A-Z_][A-Z0-9_]*[A-Z0-9]$
