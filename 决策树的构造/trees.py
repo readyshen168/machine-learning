@@ -54,6 +54,7 @@ def calcShannonEnt2(data_set):
 
 def calcShannonEnt(data_set):
     '''
+    计算data_set最后一列(类标签)的香农熵
     calcShannonEnt 的 Docstring
 
     :param dataSet: 说明
@@ -138,29 +139,48 @@ def chooseBestFeatureToSplit(dataSet):
     :param dataSet: 待划分的数据集
     :type dataSet: list[list]
 
-    numFeatures 特征数量
-    baseEntropy 数据集的原始香农值
-    bestInfoGain = 0.0 最佳信息增益值，初始为0
-    bestFeature = -1 带来最佳信息增益的特征，初始为-1
-
-    循环每一个特征：
-        # 得出该特征的取值
-        featList 该列表储存本特征的所有取值，从dataSet的每行数据列表exmaple中获取
-        uniqueVals 获取featList中的唯一属性值的集合
-        newEntropy = 0.0 以该特征划分的数据集的熵值，初始为0
-
-        遍历该特征下的每个属性值：
-            subDataSet 使用splitDataset划分出来的子数据集
-            prob 该子数据集占所有数据集的比例
-            newEntropy 通过calcShannonEnt计算该子数据集的熵值, 并累加得出该特征划分的数据集的熵值
-        infoGain 信息增益 = 原始熵增 - 以该特征划分数据集后的熵值
-        如果 信息增益大于最佳增益：
-            最佳信息增益 = 该信息增益
-            最佳特征 = 该特征
-
-    返回最佳特征
-
     """
+    # numFeatures 特征数量
+    numFeatures = len(dataSet[0]) - 1
+    # baseEntropy 数据集的原始香农值
+    baseEntropy = calcShannonEnt(dataSet)
+    # bestInfoGain = 0.0 最佳信息增益值，初始为0
+    bestInfoGain = 0.0
+    # bestFeature = -1 带来最佳信息增益的特征，初始为-1
+    bestFeature = -1
+
+    # 循环每一个特征：
+    for axis in range(numFeatures):
+      # 1.得出该特征的取值集合（去重）
+        # featList 该列表储存本特征的所有取值，从dataSet的每行数据列表exmaple中获取
+        featList = [example[axis] for example in dataSet]
+        # uniqueVals 获取featList中的唯一属性值的集合
+        uniqueVals = set(featList)
+        # newEntropy = 0.0 以该特征划分的数据集的熵值，初始为0
+        newEntropy = 0.0
+
+      # 2.得出以该特征划分数据集后的熵值
+        # 遍历该特征下的每个属性值：
+        for value in uniqueVals:
+            # subDataSet 使用splitDataset划分出来的子数据集
+            subDataSet = splitDataSet(dataSet, axis, value)
+            # prob 该子数据集占所有数据集的比例
+            prob = len(subDataSet)/(float)(len(dataSet))
+            # newEntropy 通过calcShannonEnt计算该子数据集的熵值, 并累加得出该特征划分的数据集的熵值
+            newEntropy += prob * calcShannonEnt(subDataSet)
+
+      # 3.更新带来最佳增益的特征
+        # infoGain 信息增益 = 原始熵增 - 以该特征划分数据集后的熵值
+        infoGain = baseEntropy - newEntropy
+        # 如果信息增益大于最佳增益：
+        if infoGain > bestInfoGain:
+            # 最佳信息增益 = 该信息增益
+            bestInfoGain = infoGain
+            # 最佳特征 = 该特征
+            bestFeature = axis
+
+    # 返回最佳特征
+    return bestFeature
 
 
 def majorityCnt(classList):
@@ -181,6 +201,7 @@ def majorityCnt(classList):
 
 def createTree(dataSet, labels):
     """
+    用递归的方式构建决策树
     :param dataSet: 特征值和类别值的数据集
     :type dataSet: list[list]
 
@@ -188,27 +209,43 @@ def createTree(dataSet, labels):
     :type labels: list[list]
 
     """
-    # 新建子标签subLabels，复制参数引用
+    # 新建子标签subLabels，复制labels参数引用，以免更改原标签列表(后面涉及对该列表元素的删除操作）
+    subLabels = labels[:]
 # 迭代的结束条件，返回具体类别
     # 从数据集获取类别的值列表classList
+    classList = [example[-1] for example in dataSet]
     # 如果classList里的类别值只有一种，则返回该类别值
-    # 如果类别值不止一种，则返回出现最多的类别值（调用函数majorityCnt）
+    if classList.count(classList) == len(classList):
+        return classList[0]
+    # 如果类别值不止一种且特征已分完，也就是dataSet只有一列了，则返回最多的类别值（调用函数majorityCnt）
+    if dataSet[0] == 1:
+        return majorityCnt(classList)
 
 # 构建树
-    # 1 找最佳特征
+  # 1 找最佳特征
     # 1-1 用函数chooseBestFeatureToSplit找到信息增益最大的特征bestFeat
+    bestFeat = chooseBestFeatureToSplit(dataSet)
     # 1-2 找出bestFeat对应labels标签集中的类别名bestFeatLabel
+    bestFeatLabel = subLabels[bestFeat]
     # 1-3 以对象的方式存储树myTree,以bestFeatLabel作属性，其对应的属性值为另一个对象，
     #     后面的子树是bestFeat不同取值对应的对象
+    myTree = {bestFeatLabel: {}}
     # 1-4 删除标签集合subLabels中对应bestFeat的元素
+    del (subLabels[bestFeat])
 
-    # 2 根据特征值划分数据集，构建子树
+  # 2 根据特征值划分数据集，构建子树
     # 2-1 得到dataSet中所有的bestFeat的值并组成列表featValues
+    featValues = [example[bestFeat] for example in dataSet]
     # 2-2 得出bestFeat的不重复值集合uniqueVals
+    uniqueVals = set(featValues)
     # 2-3 遍历uniqueVals，得到每一个bestFeat取值value:
-    # 2-3-1 使用splitDataSet函数以dataSet, bestFeat, value为参划分数据集，
-    # 得到子数据集subDataSet
+    for value in uniqueVals:
+        # 2-3-1 使用splitDataSet函数以dataSet, bestFeat, value为参划分数据集，
+        # 得到子数据集subDataSet
+        subDataSet = splitDataSet(dataSet, bestFeat, value)
     # 将子数据集subDataSet，subLabels传入createTree函数，返回的值存储为
     # myTree[bestFeatLabel][value]
+        myTree[bestFeatLabel][value] = createTree(subDataSet, subLabels)
 
-    # 3 返回myTree
+  # 3 返回myTree
+    return myTree
