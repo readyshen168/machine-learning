@@ -58,16 +58,27 @@ def calcShannonEnt(data_set):
 
     :param dataSet: 说明
     '''
+    # num_entries变量存储data_set的行数，也就是待计算熵值的类标签的数量
     num_entries = len(data_set)
+    # label_counts对象存储列标签对应的数量
     label_counts = {}
+    # 遍历data_set中的每行数据feat_vec
     for feat_vec in data_set:
+        # 通过feat_vec提取当前标签current_label
         current_label = feat_vec[-1]
+        # 如果当前标签不存在于label_counts中
         if current_label not in label_counts:
+            # 则当前标签的值记为0
             label_counts[current_label] = 0
+        # 如果当前标签存在于label_counts对象中,则其值自增1
         label_counts[current_label] += 1
+    # 熵的初始值shannon_ent记为0.0
     shannon_ent = 0.0
+    # 遍历label_counts对象，提取标签label和标签对应的值count
     for label, count in label_counts.items():
+        # 计算该标签在总数量中的占比prob
         prob = float(count)/num_entries
+        # 计算该标签的熵值shannon_ent: prob*log(prob,2)
         shannon_ent -= prob * log(prob, 2)
     return shannon_ent
 
