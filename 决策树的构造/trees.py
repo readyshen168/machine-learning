@@ -166,3 +166,38 @@ def majorityCnt(classList):
     # 否则自增1
     # 对classCount中的元素采用sorted方法进行排序，以元素的取值为key, 从大到小逆序
     # 返回上面排序后的列表sortedClassCount的第一个元素的第一个值，即为classList中数量最多的类别
+
+
+def createTree(dataSet, labels):
+    """
+    :param dataSet: 特征值和类别值的数据集
+    :type dataSet: list[list]
+
+    :param labels: 特征名称的数据集
+    :type labels: list[list]
+
+    """
+    # 新建子标签subLabels，复制参数引用
+# 迭代的结束条件，返回具体类别
+    # 从数据集获取类别的值列表classList
+    # 如果classList里的类别值只有一种，则返回该类别值
+    # 如果类别值不止一种，则返回出现最多的类别值（调用函数majorityCnt）
+
+# 构建树
+    # 1 找最佳特征
+    # 1-1 用函数chooseBestFeatureToSplit找到信息增益最大的特征bestFeat
+    # 1-2 找出bestFeat对应labels标签集中的类别名bestFeatLabel
+    # 1-3 以对象的方式存储树myTree,以bestFeatLabel作属性，其对应的属性值为另一个对象，
+    #     后面的子树是bestFeat不同取值对应的对象
+    # 1-4 删除标签集合subLabels中对应bestFeat的元素
+
+    # 2 根据特征值划分数据集，构建子树
+    # 2-1 得到dataSet中所有的bestFeat的值并组成列表featValues
+    # 2-2 得出bestFeat的不重复值集合uniqueVals
+    # 2-3 遍历uniqueVals，得到每一个bestFeat取值value:
+    # 2-3-1 使用splitDataSet函数以dataSet, bestFeat, value为参划分数据集，
+    # 得到子数据集subDataSet
+    # 将子数据集subDataSet，subLabels传入createTree函数，返回的值存储为
+    # myTree[bestFeatLabel][value]
+
+    # 3 返回myTree
