@@ -84,20 +84,12 @@ def calcShannonEnt(data_set):
     return shannon_ent
 
 
-def createDataSet():
+def createDataSet(dataSet, labels):
     '''
-    createDataSet 的 Docstring
+    接收数据集和特征标签集并返回
     '''
-    data_set = [
-        [1, 1, 'yes'],
-        [1, 1, 'yes'],
-        [1, 0, 'no'],
-        [0, 1, 'no'],
-        [0, 1, 'no']
 
-    ]
-    labels = ['no surfacing', 'flippers']
-    return data_set, labels
+    return dataSet, labels
 
 
 def splitDataSet(dataSet, axis, value) -> list[list[any]]:
@@ -113,22 +105,22 @@ def splitDataSet(dataSet, axis, value) -> list[list[any]]:
     :param value: 划分数据集的特征值
     :type value: int
 
-    retDataSet 用来储存划分后数据集的列表
-    循环数据集中的每一行 存在变量featVec中
-        如果该行数据对应的特征位置的值为value:
-            列表reducedFeatVec储存该特征位置前的数据
-            列表reducedFeatVec加入该特征位置后的数据
-            retDataSet加入reducedFeatVec列表
-    返回retDataSet列表
 
     :return retDataSet: list[list]
     """
+    # retDataSet 用来储存划分后数据集的列表
     retDataSet = []
+    # 循环数据集中的每一行 存在变量featVec中
     for featVec in dataSet:
+        # 如果该行数据对应的特征位置的值为value:
         if featVec[axis] == value:
+            # 列表reducedFeatVec储存该特征位置前的数据
             reducedFeatVec = featVec[:axis]
+            # 列表reducedFeatVec加入该特征位置后的数据
             reducedFeatVec.extend(featVec[axis+1:])
+            # retDataSet加入reducedFeatVec列表
             retDataSet.append(reducedFeatVec)
+    # 返回retDataSet列表
     return retDataSet
 
 

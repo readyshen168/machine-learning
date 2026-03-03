@@ -7,31 +7,50 @@ import trees
 
 
 @pytest.fixture(scope="module")
-def dataSet():
-    """提供trees.create_data_set()返回的数据集和标签，供多个测试函数使用"""
-    # 使用importlib.reload确保每次测试都使用模块的最新代码，这在交互式开发时很有用
-    # trees_module = importlib.reload(trees)
-    # my_datas, labels = trees_module.createDataSet()
-    my_datas, labels = trees.createDataSet()
-    # 返回数据集，标签集和重新加载的模块
+def sampleDataSet():
+    """
+    数据样本集，用于大多数测试
+    """
+    return [
+        [1, 1, 'yes'],
+        [1, 1, 'yes'],
+        [1, 0, 'no'],
+        [0, 1, 'no'],
+        [0, 1, 'no']
+    ]
+
+
+@pytest.fixture(scope="module")
+def sampleLabels():
+    """
+    特征标签样本集
+    """
+    return ['no surfacing', 'flippers']
+
+
+@pytest.fixture(scope="module")
+def dataSet(sampleDataSet, sampleLabels):
+    """提供trees.createDataSet()返回的数据集和标签，供多个测试函数使用"""
+
+    my_datas, labels = trees.createDataSet(sampleDataSet, sampleLabels)
     return my_datas, labels
 
 
 @pytest.fixture(scope="module")
-def testDatas():
+def testDatas(sampleDataSet, sampleLabels):
     """
     返回包含特征和类标签的向量集合
     """
-    datas, _ = trees.createDataSet()
+    datas, _ = trees.createDataSet(sampleDataSet, sampleLabels)
     return datas
 
 
 @pytest.fixture(scope="module")
-def testLabels():
+def testLabels(sampleDataSet, sampleLabels):
     """
     返回类别名称的列表
     """
-    _, labels = trees.createDataSet()
+    _, labels = trees.createDataSet(sampleDataSet, sampleLabels)
     return labels
 
 
