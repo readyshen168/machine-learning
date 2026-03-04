@@ -2,6 +2,7 @@
 香农决策树
 '''
 from math import log
+import operator as op
 
 
 def calShannonSimple(dataSet, normalize=False):
@@ -184,11 +185,19 @@ def majorityCnt(classList):
 
     """
     # 声明一个对象classCount用来储存类别对应的数量
+    classCount = {}
     # 遍历classList，统计各个类别的数量
-    # 如果classList中的某个类别vote不在classCount中，则该类别的数量记为0
+    for vote in classList:
+        # 如果classList中的某个类别vote不在classCount中，则该类别的数量记为0
+        if vote not in classCount:
+            classCount[vote] = 0
     # 否则自增1
+        classCount[vote] += 1
     # 对classCount中的元素采用sorted方法进行排序，以元素的取值为key, 从大到小逆序
+    sortedClassCount = sorted(classCount.items(),
+                              key=op.itemgetter(1), reverse=True)
     # 返回上面排序后的列表sortedClassCount的第一个元素的第一个值，即为classList中数量最多的类别
+    return sortedClassCount[0][0]
 
 
 def createTree(dataSet, labels):
@@ -206,8 +215,8 @@ def createTree(dataSet, labels):
 # 迭代的结束条件，返回具体类别
     # 从数据集获取类别的值列表classList
     classList = [example[-1] for example in dataSet]
-    # 如果classList里的类别值只有一种，则返回该类别值
-    if classList.count(classList) == len(classList):
+    # 如果classList里的类标签只有一种，则返回该类标签
+    if classList.count(classList[0]) == len(classList):
         return classList[0]
     # 如果类别值不止一种且特征已分完，也就是dataSet只有一列了，则返回最多的类别值（调用函数majorityCnt）
     if dataSet[0] == 1:
