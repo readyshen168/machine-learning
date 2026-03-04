@@ -135,6 +135,9 @@ def chooseBestFeatureToSplit(dataSet):
     """
     # numFeatures 特征数量
     numFeatures = len(dataSet[0]) - 1
+    # 若数据集已经没有特征列，则可以返回-1, 这样在createTree方法中即可合并剩下一列类标签和无信息增益这两种情况了
+    # （这两种情况都是直接返回方法majorityCnt()的计算结果，而无需在去划分数据集）
+    # if numFeatures == 0: return -1
     # baseEntropy 数据集的原始香农值
     baseEntropy = calcShannonEnt(dataSet)
     # bestInfoGain = 0.0 最佳信息增益值，初始为0
@@ -219,7 +222,7 @@ def createTree(dataSet, labels):
     if classList.count(classList[0]) == len(classList):
         return classList[0]
     # 如果类别值不止一种且特征已分完，也就是dataSet只有一列了，则返回最多的类别值（调用函数majorityCnt）
-    if dataSet[0] == 1:
+    if len(dataSet[0]) == 1:
         return majorityCnt(classList)
 
 # 构建树
